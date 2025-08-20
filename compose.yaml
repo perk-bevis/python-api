@@ -8,10 +8,21 @@ services:
       dockerfile: Dockerfile.web
       # Thiết lập biến môi trường trong container
     environment:
-      - PORT=8002 # Đặt biến PORT với giá trị 8002
+      - PORT=8000 # Đặt biến PORT với giá trị 8002
       # Load thêm các biến môi trường từ file .env
     env_file:
       - .env 
       # Mapping port giữa host và container
     ports:
-      - "8002:8002"
+      - "8000:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./src:/code:rw
+    develop:
+      watch:
+        - action: rebuild
+          path: Dockerfile
+        - action: rebuild
+          path: requirements.txt
+        - action: rebuild
+          path: compose.yaml
